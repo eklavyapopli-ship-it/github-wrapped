@@ -93,7 +93,7 @@ export default function WrappedClient({ username }: { username: string }) {
       <div className="max-w-5xl mx-auto mb-12 flex items-center gap-6">
         <img src={data.avatarUrl} className="w-24 h-24 rounded-full border border-green-500" />
         <div>
-          <h1 className="text-4xl font-bold">@{username}</h1>
+          <h1 className="md:text-4xl font-bold text-md">@{username}</h1>
           <p className="text-gray-400">GitHub Wrapped · Deep Analytics</p>
         </div>
       </div>
