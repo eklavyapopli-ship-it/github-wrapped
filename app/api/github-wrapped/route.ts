@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 
-
+const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 const query = `
 query ($login: String!) {
   user(login: $login) {
@@ -36,8 +36,7 @@ query ($login: String!) {
 }
 `;
 
-export async function onRequestGet({request,env}:any) {
-  const GITHUB_TOKEN = env.GITHUB_TOKEN;
+export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const username = searchParams.get("username");
 
