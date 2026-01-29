@@ -63,6 +63,7 @@ export async function GET(request: Request) {
   }
 
   const user = json.data.user;
+  const totalContributions = user.contributionsCollection.contributionCalendar.totalContributions
   const days =
     user.contributionsCollection.contributionCalendar.weeks.flatMap(
       (w: any) => w.contributionDays
@@ -88,18 +89,43 @@ export async function GET(request: Request) {
       currentStreak = 0;
     }
   }
+const monthlyCommits = Array(12).fill(0);
 
-  return NextResponse.json({
-    username,
-    avatarUrl: user.avatarUrl,
-    followers: user.followers.totalCount,
-    publicRepos: user.repositories.totalCount,
-    pullRequests: user.pullRequests.totalCount,
-    totalContributions:
-      user.contributionsCollection.contributionCalendar.totalContributions,
-    activityDays,
-    longestStreak,
-    longestGap,
-    pinnedRepos: user.pinnedItems.nodes.map((r: any) => r.name),
-  });
+for (const day of days) {
+  const month = new Date(day.date).getMonth();
+  monthlyCommits[month] += day.contributionCount;
+}
+const weekdayCommits = Array(7).fill(0);
+
+for (const day of days) {
+  const weekday = new Date(day.date).getDay();
+  weekdayCommits[weekday] += day.contributionCount;
+}
+const mostActiveMonth = monthlyCommits.indexOf(Math.max(...monthlyCommits));
+const mostActiveWeekday = weekdayCommits.indexOf(Math.max(...weekdayCommits));
+const avgCommitsPerActiveDay =
+  activityDays > 0
+    ? user.contributionsCollection.contributionCalendar.totalContributions / activityDays
+    : 0;
+const inactiveDays = days.length - activityDays;
+
+ return NextResponse.json({
+  username,
+  avatarUrl: user.avatarUrl,
+  followers: user.followers.totalCount,
+  publicRepos: user.repositories.totalCount,
+  pullRequests: user.pullRequests.totalCount,
+  pullRequestsMerged: 0, // optional (needs extra query)
+  totalContributions,
+  activityDays,
+  inactiveDays,
+  longestStreak,
+  longestGap,
+  avgCommitsPerActiveDay,
+  monthlyCommits,
+  weekdayCommits,
+  mostActiveMonth,
+  mostActiveWeekday,
+});
+
 }

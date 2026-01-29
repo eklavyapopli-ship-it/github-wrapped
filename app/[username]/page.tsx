@@ -4,7 +4,7 @@ export default async function Page({
 }: {
   params: Promise<{ username: string }>;
 }) {
-  const { username } = await params; // ✅ THIS IS THE FIX
+  const { username } = await params; 
 
   return <WrappedClient username={username} />;
 }

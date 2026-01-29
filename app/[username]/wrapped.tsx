@@ -1,5 +1,6 @@
 "use client";
 
+
 import { useEffect, useState } from "react";
 import { motion } from "motion/react";
 import {
@@ -9,12 +10,12 @@ import {
   Calendar,
   Users,
   FolderGit2,
+  BarChart,
+  Activity,
 } from "lucide-react";
 import { Timeline } from "@/components/ui/timeline";
 
-// ------------------------------
-// Progress Bar Component
-// ------------------------------
+
 function ProgressBar({ label, value, max }: { label: string; value: number; max: number }) {
   const percent = Math.min(100, Math.round((value / max) * 100));
   return (
@@ -35,9 +36,7 @@ function ProgressBar({ label, value, max }: { label: string; value: number; max:
   );
 }
 
-// ------------------------------
-// Mini Bar Graph (Monthly Commits)
-// ------------------------------
+
 function BarGraph({ data }: { data: number[] }) {
   const max = Math.max(...data, 1);
   return (
@@ -56,9 +55,6 @@ function BarGraph({ data }: { data: number[] }) {
   );
 }
 
-// ------------------------------
-// Main Wrapped Client
-// ------------------------------
 export default function WrappedClient({ username }: { username: string }) {
   const [data, setData] = useState<any>(null);
 
@@ -78,72 +74,64 @@ export default function WrappedClient({ username }: { username: string }) {
 
   const timelineData = [
     {
-      title: "January",
-      content: <p className="text-neutral-400">Started the year strong with {data.monthlyCommits?.[0] ?? 0} commits.</p>,
+      title: "Peak Month",
+      content: <p className="text-neutral-400">Most active month: {data.mostActiveMonth + 1}</p>,
     },
     {
-      title: "Mid Year Peak",
-      content: <p className="text-neutral-400">Highest activity streak and most PRs merged.</p>,
+      title: "Consistency",
+      content: <p className="text-neutral-400">Average {data.avgCommitsPerActiveDay.toFixed(1)} commits per active day</p>,
     },
     {
-      title: "Year End",
-      content: <p className="text-neutral-400">Wrapped the year with consistency and cleanup commits.</p>,
+      title: "Focus",
+      content: <p className="text-neutral-400">And Reached till {data.totalContributions} Total Contributions</p>,
     },
   ];
 
   return (
     <main className="min-h-screen bg-black text-white px-6 py-12">
-      {/* Header */}
+
       <div className="max-w-5xl mx-auto mb-12 flex items-center gap-6">
-        <img
-          src={data.avatarUrl}
-          className="w-24 h-24 rounded-full border border-green-500"
-        />
+        <img src={data.avatarUrl} className="w-24 h-24 rounded-full border border-green-500" />
         <div>
           <h1 className="text-4xl font-bold">@{username}</h1>
-          <p className="text-gray-400">GitHub Wrapped · Public Contributions</p>
+          <p className="text-gray-400">GitHub Wrapped · Deep Analytics</p>
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-6 mb-16">
         <Stat icon={FolderGit2} label="Public Repos" value={data.publicRepos} />
         <Stat icon={GitPullRequest} label="Pull Requests" value={data.pullRequests} />
         <Stat icon={Users} label="Followers" value={data.followers} />
+        <Stat icon={Activity} label="Total Commits" value={data.totalContributions} />
         <Stat icon={Calendar} label="Active Days" value={data.activityDays} />
         <Stat icon={Flame} label="Longest Streak" value={`${data.longestStreak} days`} />
         <Stat icon={Snowflake} label="Longest Gap" value={`${data.longestGap} days`} />
+        <Stat icon={BarChart} label="Avg / Day" value={data.avgCommitsPerActiveDay.toFixed(1)} />
       </div>
 
-      {/* Progress Insights */}
+
       <div className="max-w-5xl mx-auto mb-20">
-        <h2 className="text-2xl font-bold mb-6">Contribution Breakdown</h2>
-        <ProgressBar label="Commit Consistency" value={data.activityDays} max={365} />
-        <ProgressBar label="PR Acceptance" value={data.pullRequestsMerged} max={data.pullRequests || 1} />
-        <ProgressBar label="Repo Activity" value={data.activeRepos} max={data.publicRepos || 1} />
+        <ProgressBar label="Year Coverage" value={data.activityDays} max={365} />
+        <ProgressBar label="PR Merge Rate" value={data.pullRequestsMerged} max={data.pullRequests || 1} />
+        <ProgressBar label="Repo Focus" value={data.activeRepos} max={data.publicRepos || 1} />
       </div>
-
-      {/* Graph Section */}
-      <div className="max-w-5xl mx-auto mb-24">
-        <h2 className="text-2xl font-bold mb-4">Commits by Month</h2>
-        <BarGraph data={data.monthlyCommits || []} />
-      </div>
-
-      {/* Timeline */}
       <Timeline data={timelineData} />
+
+      <div className="max-w-5xl mx-auto mb-24 mt-50">
+        <h2 className="text-2xl font-bold mb-4">Monthly Commit Volume</h2>
+        <BarGraph data={data.monthlyCommits} />
+      </div>
+
+
+
     </main>
   );
 }
 
-// ------------------------------
-// Stat Card
-// ------------------------------
+
 function Stat({ icon: Icon, label, value }: { icon: any; label: string; value: any }) {
   return (
-    <motion.div
-      whileHover={{ scale: 1.03 }}
-      className="p-6 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-green-500 transition"
-    >
+    <motion.div whileHover={{ scale: 1.04 }} className="p-6 rounded-xl bg-zinc-900 border border-zinc-800 hover:border-green-500 transition">
       <div className="flex items-center gap-3 mb-2">
         <Icon className="text-green-400" />
         <span className="text-gray-400">{label}</span>
