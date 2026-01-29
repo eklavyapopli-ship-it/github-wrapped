@@ -117,7 +117,7 @@ export default function WrappedClient({ username }: { username: string }) {
       </div>
       <Timeline data={timelineData} />
 
-      <div className="max-w-5xl mx-auto mb-24 mt-50">
+      <div className="max-w-5xl mx-auto mb-24 md:mt-100 mt-25 border ">
         <h2 className="text-2xl font-bold mb-4">Monthly Commit Volume</h2>
         <BarGraph data={data.monthlyCommits} />
       </div>
