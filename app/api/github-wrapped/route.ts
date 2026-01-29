@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-
+export const runtime = 'edge';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
+
 const query = `
 query ($login: String!) {
   user(login: $login) {
