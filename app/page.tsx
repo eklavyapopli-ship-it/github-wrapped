@@ -44,7 +44,7 @@ export default function Home() {
             Your year on GitHub, visualized.
           </p>
 
-          <div className="flex gap-3 justify-center">
+          <div className="flex md:flex-row flex-col gap-3 justify-center items-center">
             <input
               value={username}
               onChange={(e) => setUsername(e.target.value)}
@@ -53,7 +53,7 @@ export default function Home() {
             />
             <button
               onClick={handleGenerate}
-              className="px-6 py-3 rounded-lg bg-green-500 text-black font-semibold hover:bg-green-400 transition"
+              className="px-6 py-3 rounded-lg w-64 md:w-auto bg-green-500 text-black font-semibold hover:bg-green-400 transition"
             >
               Generate
             </button>
